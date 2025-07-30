@@ -10,16 +10,15 @@ name: build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     tags:
       - "v?[0-9]+.[0-9]+.[0-9]+*"
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     name: Unit tests
-    if: false  # delete this line to enable automatic testing
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -41,9 +40,8 @@ jobs:
 
   build:
     name: Build
-    if: false  # delete this line and uncomment the line below to enable automatic builds
-    # if: github.event_name == 'push' || github.event_name == 'release'
-    # needs: [ test ]  # uncomment to require passing tests
+    if: github.event_name == 'push' || github.event_name == 'release'
+    needs: [test] # uncomment to require passing tests
     runs-on: ubuntu-22.04
 
     steps:
@@ -95,7 +93,7 @@ jobs:
 
         # Here, we want to do the docker build twice:
         # The first build pushes to our local registry for testing.
-        # The second build pushes to Docker Hub and ghcr.io 
+        # The second build pushes to Docker Hub and ghcr.io
       - name: Build (local only)
         uses: docker/build-push-action@v3
         id: docker_build
@@ -115,7 +113,7 @@ jobs:
             echo "No examples."
             exit 0
           fi
-        
+
           dock_image=${{ steps.info.outputs.local_tag }}
           output_dir=$(mktemp -d)
           cmd=$(docker image inspect -f '{{ (index .Config.Cmd 0) }}' $dock_image)
@@ -123,7 +121,7 @@ jobs:
             -v "$PWD/examples/incoming:/incoming:ro" \
             -v "$output_dir:/outgoing:rw" \
             $dock_image $cmd /incoming /outgoing
-          
+
           for expected_file in $(find examples/outgoing -type f); do
             fname="${expected_file##*/}"
             out_path="$output_dir/$fname"
@@ -157,7 +155,7 @@ jobs:
           file: ./Dockerfile
           tags: ${{ steps.info.outputs.tags_csv }}
           # if non-x86_84 architectures are supported, add them here
-          platforms: linux/amd64  #,linux/arm64,linux/ppc64le
+          platforms: linux/amd64 #,linux/arm64,linux/ppc64le
           push: ${{ steps.info.outputs.push }}
           cache-to: type=gha,mode=max
 
@@ -175,7 +173,7 @@ jobs:
       - name: Update DockerHub description
         if: steps.upload.outcome == 'success'
         uses: peter-evans/dockerhub-description@v3
-        continue-on-error: true  # it is not crucial that this works
+        continue-on-error: true # it is not crucial that this works
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
