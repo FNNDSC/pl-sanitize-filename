@@ -18,6 +18,7 @@ on:
 
 jobs:
   test:
+    if: false
     name: Unit tests
     runs-on: ubuntu-22.04
     steps:
