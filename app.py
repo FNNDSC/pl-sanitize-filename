@@ -59,7 +59,7 @@ def main(options: Namespace, inputdir: Path, outputdir: Path):
             sanitized_full_out_filename = re.sub(r'_+', '_', sanitized_full_out_filename)
 
             print(f'to copy: in: {full_filename} out: {sanitized_full_out_filename}')
-            sanitized_full_dirname = os.path.dirname(sanitized_full_dirname)
+            sanitized_full_dirname = os.path.dirname(sanitized_full_out_filename)
             os.makedirs(sanitized_full_dirname, exist_ok=True)
             shutil.copyfile(full_filename, full_out_filename)
 
