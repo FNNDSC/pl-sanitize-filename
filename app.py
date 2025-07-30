@@ -9,7 +9,7 @@ from argparse import ArgumentParser, Namespace, ArgumentDefaultsHelpFormatter
 
 from chris_plugin import chris_plugin, PathMapper
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 DISPLAY_TITLE = r"""
 sanitize filenames
@@ -61,7 +61,7 @@ def main(options: Namespace, inputdir: Path, outputdir: Path):
             print(f'to copy: in: {full_filename} out: {sanitized_full_out_filename}')
             sanitized_full_dirname = os.path.dirname(sanitized_full_out_filename)
             os.makedirs(sanitized_full_dirname, exist_ok=True)
-            shutil.copyfile(full_filename, full_out_filename)
+            shutil.copyfile(full_filename, sanitized_full_out_filename)
 
 
 if __name__ == '__main__':
