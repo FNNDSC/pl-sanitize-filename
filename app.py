@@ -9,7 +9,7 @@ from argparse import ArgumentParser, Namespace, ArgumentDefaultsHelpFormatter
 
 from chris_plugin import chris_plugin, PathMapper
 
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 
 DISPLAY_TITLE = r"""
 sanitize filenames
